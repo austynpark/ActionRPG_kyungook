@@ -16,7 +16,7 @@ public:
 	ACritter();
 	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Static Mesh")
-	class UStaticMeshComponent* MeshComponent;
+	class USkeletalMeshComponent* MeshComponent;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Camera")
 	class USpringArmComponent* SpringArm;
