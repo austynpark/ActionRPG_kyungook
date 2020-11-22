@@ -13,11 +13,11 @@ class ACTIONRPG_KYUNGOOK_API ACharacterBase : public ACharacter
 private:
 	/** SpringArm poistioning the camera behind the player */
 	UPROPERTY(Category = "Camera", VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
-		class USpringArmComponent* SpringArm;
+	class USpringArmComponent* SpringArm;
 
 	/** Camera following behind the player */
 	UPROPERTY(Category = "Camera", VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
-		class UCameraComponent* Camera;
+	class UCameraComponent* Camera;
 
 public:
 	// Sets default values for this character's properties

@@ -31,7 +31,6 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Movement")
 	float Direction;
 
-
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Movement")
 	bool bIsInAir;
 

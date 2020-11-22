@@ -15,7 +15,7 @@ ACharacterBase::ACharacterBase()
 
 	SpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("SpringArm"));
 	SpringArm->SetupAttachment(GetRootComponent());
-	SpringArm->TargetArmLength = 600.f; // Camera follows at this distance
+	SpringArm->TargetArmLength = 450.f; // Camera follows at this distance
 	SpringArm->bUsePawnControlRotation = true;  // Rotates SpringArm based on controller
 	SpringArm->bEnableCameraRotationLag = true;
 	SpringArm->bEnableCameraLag = true;
@@ -24,7 +24,7 @@ ACharacterBase::ACharacterBase()
 	Camera->SetupAttachment(SpringArm, USpringArmComponent::SocketName);
 	Camera->bUsePawnControlRotation = false;
 
-	GetCapsuleComponent()->SetCapsuleSize(88.0f, 34.0f);
+	GetCapsuleComponent()->SetCapsuleSize(88.0f, 35.0f);
 
 	BaseTurnRate = 65.f;
 	BaseLookUpRate = 65.f;
