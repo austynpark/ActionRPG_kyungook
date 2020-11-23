@@ -21,24 +21,30 @@ void AFloatingPlatform::BeginPlay()
 	Super::BeginPlay();
 	StartPoint = GetActorLocation();
 	EndPoint += StartPoint;
-	//GetWorldTimerManager().SetTimer(InterpTimer, this, , 1.f)
+	GetWorldTimerManager().SetTimer(InterpTimer, this, &AFloatingPlatform::ToggleInterp, 1.f);
 }
 
 // Called every frame
 void AFloatingPlatform::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	CurrentPoint = GetActorLocation();
-	SetActorLocation(FMath::VInterpTo(CurrentPoint, EndPoint, DeltaTime, InterpSpeed));
-	UpdateFloatingPlatform();
+
+	if (bIsInterping)
+	{
+		CurrentPoint = GetActorLocation();
+		SetActorLocation(FMath::VInterpTo(CurrentPoint, EndPoint, DeltaTime, InterpSpeed));
+		UpdateFloatingPlatform();
+	}
 }
 
 void AFloatingPlatform::UpdateFloatingPlatform()
 {
 	if (EndPoint == CurrentPoint)
 	{
+		ToggleInterp();
 		EndPoint = StartPoint;
 		StartPoint = CurrentPoint;
+		GetWorldTimerManager().SetTimer(InterpTimer, this, &AFloatingPlatform::ToggleInterp, 1.f);
 	}
 }
 

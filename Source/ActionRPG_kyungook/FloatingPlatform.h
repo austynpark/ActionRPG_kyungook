@@ -21,7 +21,7 @@ public:
 	UPROPERTY(Category = "Platform", EditAnywhere)
 	FVector StartPoint;
 
-	UPROPERTY(Category = "Platform", meta = (MakeEditWidget = "true"))
+	UPROPERTY(Category = "Platform", EditAnywhere, meta = (MakeEditWidget = "true"))
 	FVector EndPoint;
 
 	// Speed of Floating Platform
@@ -43,4 +43,6 @@ public:
 
 	// Exchange Value of StartPoint <-> EndPoint if Platform reaches EndPoint
 	void UpdateFloatingPlatform();
+
+	FORCEINLINE void ToggleInterp() { bIsInterping = !bIsInterping; }
 };
