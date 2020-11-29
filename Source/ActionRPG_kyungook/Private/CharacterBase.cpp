@@ -49,6 +49,17 @@ ACharacterBase::ACharacterBase()
 	GetCharacterMovement()->JumpZVelocity = JumpSpeed;
 	GetCharacterMovement()->MaxWalkSpeed = WalkSpeed;
 
+	MaxHealth = 100.f;
+	Health = 65.f;
+	MaxStamina = 350.f;
+	Stamina = 120.f;
+	LowStamina = 100.f;
+	StaminaRate = 10.f;
+
+	bIsShiftPressed = false;
+
+	MovementStatus = EMovementStatus::MS_Walk;
+	StaminaStatus = EStaminaStatus::SS_Recovering;
 }
 
 // Called when the game starts or when spawned
@@ -62,7 +73,8 @@ void ACharacterBase::BeginPlay()
 void ACharacterBase::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
+	
+	HandleStamina(DeltaTime * StaminaRate);
 }
 
 // Called to bind functionality to input
@@ -141,13 +153,63 @@ void ACharacterBase::LookUpRate(float Rate)
 
 void ACharacterBase::TurnOnRun()
 {
-	UE_LOG(LogTemp, Warning, TEXT("Pressed"));
-	GetCharacterMovement()->MaxWalkSpeed = 450.f;
+	bIsShiftPressed = true;
 }
 
 void ACharacterBase::TurnOffRun()
 {
-	UE_LOG(LogTemp, Warning, TEXT("Released"));
-	GetCharacterMovement()->MaxWalkSpeed = 150.f;
+	bIsShiftPressed = false;
+	GetWorldTimerManager().SetTimer(StaminaTimer, FTimerDelegate::CreateUObject(this, &ACharacterBase::SetStaminaStatus, EStaminaStatus::SS_Recovering), 2.0f, false);
 }
 
+void ACharacterBase::SetMovementStatus(EMovementStatus Status)
+{
+	MovementStatus = Status;
+
+	switch (MovementStatus)
+	{
+	case EMovementStatus::MS_Walk:
+		GetCharacterMovement()->MaxWalkSpeed = WalkSpeed;
+		break;
+	case EMovementStatus::MS_Run:
+		GetCharacterMovement()->MaxWalkSpeed = 450.f;
+		break;
+	}
+}
+
+void ACharacterBase::HandleStamina(float val)
+{
+	switch(StaminaStatus)
+	{
+	case EStaminaStatus::SS_LowStamina:
+	case EStaminaStatus::SS_Normal :
+		if (bIsShiftPressed 
+			&& (!FMath::IsNearlyZero(Stamina) && (Stamina > 0)))
+		{
+			SetMovementStatus(EMovementStatus::MS_Run);
+			Stamina -= val * 5.f;
+
+			if (Stamina <= LowStamina)
+				SetStaminaStatus(EStaminaStatus::SS_LowStamina);
+		}
+		else
+		{
+			SetMovementStatus(EMovementStatus::MS_Walk);
+			if (FMath::IsNearlyZero(Stamina))
+			{
+				SetStaminaStatus(EStaminaStatus::SS_Exhausted);
+			}
+		}
+		break;
+	case EStaminaStatus::SS_Exhausted :
+		SetMovementStatus(EMovementStatus::MS_Walk);
+		break;
+	case EStaminaStatus::SS_Recovering :
+		if (!bIsShiftPressed && (Stamina < MaxStamina))
+			Stamina += val * 10.f;
+		else
+			SetStaminaStatus(EStaminaStatus::SS_Normal);
+		break;
+		
+	}
+}

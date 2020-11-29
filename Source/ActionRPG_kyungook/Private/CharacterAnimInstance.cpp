@@ -22,7 +22,7 @@ void UCharacterAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 	if (Pawn != nullptr)
 	{
 		FVector Speed = Pawn->GetVelocity();
-		UE_LOG(LogTemp, Warning, TEXT("Speed.X : %f, Speed.y : %f"), Speed.X, Speed.Y);
+		//UE_LOG(LogTemp, Warning, TEXT("Speed.X : %f, Speed.y : %f"), Speed.X, Speed.Y);
 		FVector LateralSpeed = FVector(Speed.X, Speed.Y, 0.f);
 		Direction = LateralSpeed.Rotation().Yaw;
 		bIsInAir = Pawn->GetMovementComponent()->IsFalling();

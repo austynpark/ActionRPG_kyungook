@@ -4,7 +4,6 @@
 
 #include "Components/StaticMeshComponent.h"
 #include "Components/BoxComponent.h"
-#include "TimerManager.h"
 
 // Sets default values
 AFloorSwitch::AFloorSwitch()
