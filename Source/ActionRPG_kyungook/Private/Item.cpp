@@ -19,6 +19,8 @@ AItem::AItem()
 
 	Mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
 	Mesh->SetupAttachment(GetRootComponent());
+
+	bIsRotate = false;
 }
 
 // Called when the game starts or when spawned
@@ -34,6 +36,11 @@ void AItem::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	if (bIsRotate)
+	{
+		AddActorLocalRotation(FQuat(RotAxis, 0.1));
+		//SetActorRotation()
+	}
 }
 
 void AItem::OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)

@@ -15,6 +15,12 @@ public:
 	// Sets default values for this actor's properties
 	AItem();
 
+
+
+protected:
+	// Called when the game starts or when spawned
+	virtual void BeginPlay() override;
+
 	UPROPERTY(Category = "Item", VisibleAnywhere, BlueprintReadOnly)
 	class UStaticMeshComponent* Mesh;
 
@@ -22,9 +28,12 @@ public:
 	UPROPERTY(Category = "Item | Collision", VisibleAnywhere, BlueprintReadOnly)
 	class USphereComponent* Collider;
 
-protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
+	UPROPERTY(Category = "Item | Item Rotation", EditAnywhere, BlueprintReadWrite)
+	bool bIsRotate;
+
+	/** Axis for Rotation */
+	UPROPERTY(Category = "Item | Item Rotation", EditAnywhere, BlueprintReadWrite)
+	FVector RotAxis;
 
 public:	
 	// Called every frame
