@@ -3,7 +3,10 @@
 
 #include "Item.h"
 
+#include "Kismet/GameplayStatics.h"
 #include "Components/SphereComponent.h"
+#include "Particles/ParticleSystemComponent.h"
+#include "Sound/SoundCue.h"
 
 // Sets default values
 AItem::AItem()
@@ -17,10 +20,13 @@ AItem::AItem()
 	Collider->SetCollisionResponseToChannel(ECollisionChannel::ECC_Pawn, ECollisionResponse::ECR_Overlap);
 	RootComponent = Collider;
 
-	Mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
-	Mesh->SetupAttachment(GetRootComponent());
+	ItemParticle = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("Item Particle"));
+	ItemParticle->SetupAttachment(GetRootComponent());
 
 	bIsRotate = false;
+
+	ItemName = FText::FromString("ItemName");
+	ItemDescription = FText::FromString("ItemDescription");
 }
 
 // Called when the game starts or when spawned
@@ -35,21 +41,24 @@ void AItem::BeginPlay()
 void AItem::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
 	if (bIsRotate)
 	{
-		AddActorLocalRotation(FQuat(RotAxis, 0.1));
-		//SetActorRotation()
+		AddActorLocalRotation(FQuat(RotAxis, DeltaTime));
 	}
 }
 
 void AItem::OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	UE_LOG(LogTemp, Warning, TEXT("Overlap Begin"));
+	UGameplayStatics::SpawnEmitterAtLocation(this, OverlapParticle, GetActorLocation(), FRotator(0), true);
+	UGameplayStatics::PlaySound2D(this, OverlapSound);
 }
 
 void AItem::OnOverlapEnd(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
 {
-	UE_LOG(LogTemp, Warning, TEXT("Overlap End"));
+}
+
+void AItem::OnUse_Implementation(ACharacterBase* Character)
+{
+	UE_LOG(LogTemp, Warning, TEXT("Item Base Class On Use Func Called"));
 }
 

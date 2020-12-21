@@ -40,11 +40,9 @@ private:
 	UPROPERTY(Category = "Camera", VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	class UCameraComponent* Camera;
 
-	FTimerHandle StaminaTimer;
-
-	bool bIsShiftPressed;
-
-	bool bIsJumping;
+	/** Character Inventory */
+	UPROPERTY(Category = "Inventory", EditAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	class UInventorySystemComponent* Inventory;
 
 	UPROPERTY(Category = "Enums", VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	EMovementStatus MovementStatus;
@@ -75,10 +73,15 @@ public:
 	UPROPERTY(Category = "Movement Speed", EditAnywhere, BlueprintReadOnly)
 	float WalkSpeed = 150.f;
 
+	bool bIsShiftPressed;
+
+	bool bIsJumping;
 
 	/** Player Stats
 	* @param 
 	*/
+	FTimerHandle StaminaTimer;
+
 	UPROPERTY(Category = "Player Stats", EditDefaultsOnly, BlueprintReadWrite)
 	float MaxHealth;
 
@@ -96,6 +99,12 @@ public:
 	/**  Rate of Stamina Recover & Use */
 	UPROPERTY(Category = "Player Stats", EditDefaultsOnly, BlueprintReadWrite)
 	float StaminaRate;
+
+	/** 
+	* Item Use
+	*/
+	UFUNCTION(BlueprintCallable, Category = "Item")
+	void UseItem(class AItem* item);
 
 protected:
 	// Called when the game starts or when spawned
@@ -139,4 +148,6 @@ public:
 	*	Exhausted -> MovmentSataus == Walk	
 	*/
 	void HandleStamina(float val);
+
+	void AddToInventory(class AItem* item);
 };

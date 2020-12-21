@@ -23,6 +23,13 @@ public:
 	UPROPERTY(Category = "Widget", EditAnywhere, BlueprintReadWrite)
 	UUserWidget* HUDOverlay;
 
+	UPROPERTY(Category = "Widget", EditAnywhere, BlueprintReadWrite)
+	TSubclassOf<class UUserWidget> HUDInventoryAsset;
+	
+	UPROPERTY(Category = "Widget", EditAnywhere, BlueprintReadWrite)
+	UUserWidget* HUDInventory;
+
+	
 protected:
 	virtual void BeginPlay() override;
 

@@ -1,6 +1,8 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 #include "CharacterBase.h"
 
+#include "Item.h"
+#include "InventorySystemComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "Camera/CameraComponent.h"
 #include "GameFramework/SpringArmComponent.h"
@@ -24,6 +26,8 @@ ACharacterBase::ACharacterBase()
 	Camera->SetupAttachment(SpringArm, USpringArmComponent::SocketName);
 	Camera->bUsePawnControlRotation = false;
 
+	Inventory = CreateDefaultSubobject<UInventorySystemComponent>(TEXT("Inventory"));
+
 	GetCapsuleComponent()->SetCapsuleSize(88.0f, 35.0f);
 
 	BaseTurnRate = 65.f;
@@ -36,7 +40,6 @@ ACharacterBase::ACharacterBase()
 	bUseControllerRotationYaw = false;
 	bUseControllerRotationPitch = false;
 	bUseControllerRotationRoll = false;
-	bIsJumping = false;
 
 	// Uncomment this to move character in the direction of camera
 	// Configure Character Movement
@@ -57,9 +60,18 @@ ACharacterBase::ACharacterBase()
 	StaminaRate = 10.f;
 
 	bIsShiftPressed = false;
+	bIsJumping = false;
 
 	MovementStatus = EMovementStatus::MS_Walk;
 	StaminaStatus = EStaminaStatus::SS_Recovering;
+}
+
+void ACharacterBase::UseItem(AItem* item)
+{
+	if (item)
+	{
+		item->OnUse(this);
+	}
 }
 
 // Called when the game starts or when spawned
@@ -73,7 +85,7 @@ void ACharacterBase::BeginPlay()
 void ACharacterBase::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	
+
 	HandleStamina(DeltaTime * StaminaRate);
 }
 
@@ -159,7 +171,7 @@ void ACharacterBase::TurnOnRun()
 void ACharacterBase::TurnOffRun()
 {
 	bIsShiftPressed = false;
-	GetWorldTimerManager().SetTimer(StaminaTimer, FTimerDelegate::CreateUObject(this, &ACharacterBase::SetStaminaStatus, EStaminaStatus::SS_Recovering), 2.0f, false);
+	GetWorldTimerManager().SetTimer(StaminaTimer, FTimerDelegate::CreateUObject(this, &ACharacterBase::SetStaminaStatus, EStaminaStatus::SS_Recovering), 0.5f, false);
 }
 
 void ACharacterBase::SetMovementStatus(EMovementStatus Status)
@@ -211,5 +223,13 @@ void ACharacterBase::HandleStamina(float val)
 			SetStaminaStatus(EStaminaStatus::SS_Normal);
 		break;
 		
+	}
+}
+
+void ACharacterBase::AddToInventory(AItem* item)
+{
+	if (item)
+	{
+		Inventory->AddItem(item);
 	}
 }

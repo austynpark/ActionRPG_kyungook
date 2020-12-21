@@ -14,8 +14,15 @@ void APlayerControllerBase::BeginPlay()
 		HUDOverlay = CreateWidget<UUserWidget>(this, HUDOverlayAsset);
 	}
 
+	if (HUDInventoryAsset)
+	{
+		HUDInventory = CreateWidget<UUserWidget>(this, HUDInventoryAsset);
+	}
+
 	HUDOverlay->AddToViewport();
-	
+	HUDInventory->AddToViewport();
+
 	HUDOverlay->SetVisibility(ESlateVisibility::Visible);
 
+	HUDInventory->SetVisibility(ESlateVisibility::Visible);
 }
