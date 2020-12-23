@@ -5,7 +5,7 @@
 // Sets default values for this component's properties
 UInventorySystemComponent::UInventorySystemComponent()
 {
-	PrimaryComponentTick.bCanEverTick = true;
+	PrimaryComponentTick.bCanEverTick = false;
 	capacity = 10;
 }
 
@@ -55,19 +55,19 @@ void UInventorySystemComponent::TickComponent(float DeltaTime, ELevelTick TickTy
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	for (auto& item : Items)
-	{
-		if (Items[0] == nullptr)
-		{
-			UE_LOG(LogTemp, Warning, TEXT("Potion NULL"));
-		}
-		else
-		{
-			UE_LOG(LogTemp, Warning, TEXT("Potion NOT DELETED"));
-			UE_LOG(LogTemp, Warning, TEXT("%s"), *Items[0]->ItemName.ToString());
-		}
-	}
-	
+	//for (auto& item : Items)
+	//{
+	//	if (Items[0] == nullptr)
+	//	{
+	//		UE_LOG(LogTemp, Warning, TEXT("Potion NULL"));
+	//	}
+	//	else
+	//	{
+	//		UE_LOG(LogTemp, Warning, TEXT("Potion NOT DELETED"));
+	//		UE_LOG(LogTemp, Warning, TEXT("%s"), *Items[0]->ItemName.ToString());
+	//	}
+	//}
+	//
 		
 	// ...
 }

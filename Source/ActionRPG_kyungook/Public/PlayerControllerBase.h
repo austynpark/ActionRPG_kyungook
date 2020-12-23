@@ -13,6 +13,7 @@ UCLASS()
 class ACTIONRPG_KYUNGOOK_API APlayerControllerBase : public APlayerController
 {
 	GENERATED_BODY()
+
 public:
 
 	/** Reference to the UMG asset in the editor */
@@ -29,8 +30,11 @@ public:
 	UPROPERTY(Category = "Widget", EditAnywhere, BlueprintReadWrite)
 	UUserWidget* HUDInventory;
 
-	
+	// Called to bind functionality to input
+	virtual void SetupInputComponent() override;
+
+	UFUNCTION(BlueprintCallable)
+	void ToggleInventoryHUD();
 protected:
 	virtual void BeginPlay() override;
-
 };

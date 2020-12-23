@@ -3,6 +3,7 @@
 
 #include "Item.h"
 
+#include "CharacterBase.h"
 #include "Kismet/GameplayStatics.h"
 #include "Components/SphereComponent.h"
 #include "Particles/ParticleSystemComponent.h"
@@ -51,6 +52,16 @@ void AItem::OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* Oth
 {
 	UGameplayStatics::SpawnEmitterAtLocation(this, OverlapParticle, GetActorLocation(), FRotator(0), true);
 	UGameplayStatics::PlaySound2D(this, OverlapSound);
+
+	if (OtherActor)
+	{
+		ACharacterBase* Character = Cast<ACharacterBase>(OtherActor);
+		if (Character)
+		{
+			Character->AddToInventory(this);
+		}
+	}
+
 }
 
 void AItem::OnOverlapEnd(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
@@ -59,6 +70,5 @@ void AItem::OnOverlapEnd(UPrimitiveComponent* OverlappedComponent, AActor* Other
 
 void AItem::OnUse_Implementation(ACharacterBase* Character)
 {
-	UE_LOG(LogTemp, Warning, TEXT("Item Base Class On Use Func Called"));
 }
 

@@ -71,6 +71,7 @@ void ACharacterBase::UseItem(AItem* item)
 	if (item)
 	{
 		item->OnUse(this);
+		Inventory->RemoveItem(item);
 	}
 }
 
