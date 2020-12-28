@@ -74,4 +74,6 @@ public:
 	UFUNCTION(BlueprintNativeEvent)
 	void OnUse(class ACharacterBase* Character);
 	virtual void OnUse_Implementation(class ACharacterBase* Character);
+
+	FORCEINLINE class USphereComponent* GetCollider() const { return Collider; }
 };

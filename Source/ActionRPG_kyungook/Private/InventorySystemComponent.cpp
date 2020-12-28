@@ -40,8 +40,10 @@ bool UInventorySystemComponent::RemoveItem(AItem* item)
 		if (Items.Contains(item))
 		{
 			Items.RemoveSingle(item);
+			UE_LOG(LogTemp, Warning, TEXT("RemoveItem Function Called"));
 			if (OnInventoryUpdated.IsBound())
 			{
+				UE_LOG(LogTemp, Warning, TEXT("InventoryUpdate Function Called"));
 				// Update UI
 				OnInventoryUpdated.Broadcast();
 			}
@@ -55,19 +57,19 @@ void UInventorySystemComponent::TickComponent(float DeltaTime, ELevelTick TickTy
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	//for (auto& item : Items)
-	//{
-	//	if (Items[0] == nullptr)
-	//	{
-	//		UE_LOG(LogTemp, Warning, TEXT("Potion NULL"));
-	//	}
-	//	else
-	//	{
-	//		UE_LOG(LogTemp, Warning, TEXT("Potion NOT DELETED"));
-	//		UE_LOG(LogTemp, Warning, TEXT("%s"), *Items[0]->ItemName.ToString());
-	//	}
-	//}
-	//
+	for (auto& item : Items)
+	{
+		if (Items[0] == nullptr)
+		{
+			UE_LOG(LogTemp, Warning, TEXT("Potion NULL"));
+		}
+		else
+		{
+			UE_LOG(LogTemp, Warning, TEXT("Potion NOT DELETED"));
+			UE_LOG(LogTemp, Warning, TEXT("%s"), *Items[0]->ItemName.ToString());
+		}
+	}
+	
 		
 	// ...
 }

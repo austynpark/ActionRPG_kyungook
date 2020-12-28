@@ -43,6 +43,7 @@ void AWeapon::OnUse_Implementation(ACharacterBase* Character)
 		if (RightHandSocket)
 		{
 			RightHandSocket->AttachActor(this, Character->GetMesh());
+			Character->SetRightHandWeapon(this);
 		}
 	}
 }

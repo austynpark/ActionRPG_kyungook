@@ -16,7 +16,7 @@ AItem::AItem()
 	PrimaryActorTick.bCanEverTick = true;
 
 	Collider = CreateDefaultSubobject<USphereComponent>(TEXT("Collider"));
-	Collider->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+	Collider->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
 	Collider->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);
 	Collider->SetCollisionResponseToChannel(ECollisionChannel::ECC_Pawn, ECollisionResponse::ECR_Overlap);
 	RootComponent = Collider;

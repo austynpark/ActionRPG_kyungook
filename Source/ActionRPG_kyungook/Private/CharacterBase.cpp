@@ -2,8 +2,10 @@
 #include "CharacterBase.h"
 
 #include "Item.h"
+#include "Weapon.h"
 #include "InventorySystemComponent.h"
 #include "Components/CapsuleComponent.h"
+#include "Components/SphereComponent.h"
 #include "Camera/CameraComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
@@ -64,6 +66,8 @@ ACharacterBase::ACharacterBase()
 
 	MovementStatus = EMovementStatus::MS_Walk;
 	StaminaStatus = EStaminaStatus::SS_Recovering;
+
+	RightHandWeapon = nullptr;
 }
 
 void ACharacterBase::UseItem(AItem* item)
@@ -73,6 +77,27 @@ void ACharacterBase::UseItem(AItem* item)
 		item->OnUse(this);
 		Inventory->RemoveItem(item);
 	}
+}
+
+void ACharacterBase::RemoveFromInventory(AItem* item)
+{
+	if (item)
+	{
+		Inventory->RemoveItem(item);
+		item->SetActorHiddenInGame(false);
+		item->SetActorLocation(GetActorLocation() + GetActorForwardVector() * 50);
+		item->SetActorEnableCollision(true);
+	}
+}
+
+void ACharacterBase::SetRightHandWeapon(AWeapon* rightHandWeapon)
+{
+	if (RightHandWeapon != nullptr)
+	{
+		RightHandWeapon->Destroy();
+	}
+
+	RightHandWeapon = rightHandWeapon;
 }
 
 // Called when the game starts or when spawned

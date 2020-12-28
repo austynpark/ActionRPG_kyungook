@@ -50,6 +50,8 @@ private:
 	UPROPERTY(Category = "Enums", VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	EStaminaStatus StaminaStatus;
 
+	class AWeapon* RightHandWeapon;
+
 public:
 	// Sets default values for this character's properties
 	ACharacterBase();
@@ -100,12 +102,15 @@ public:
 	UPROPERTY(Category = "Player Stats", EditDefaultsOnly, BlueprintReadWrite)
 	float StaminaRate;
 
-	/** 
-	* Item Use
-	*/
+	/** Item Use */
 	UFUNCTION(BlueprintCallable, Category = "Item")
 	void UseItem(class AItem* item);
+	
+	/* Remove Item From Character Inventory */
+	UFUNCTION(BlueprintCallable, Category = "Item")
+	void RemoveFromInventory(class AItem* item);
 
+	void SetRightHandWeapon(class AWeapon* rightHandWeapon);
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
