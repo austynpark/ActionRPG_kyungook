@@ -4,6 +4,8 @@
 #include "Weapon.h"
 
 #include "CharacterBase.h"
+#include "Kismet/GameplayStatics.h"
+#include "Sound/SoundCue.h"
 #include "Components/SphereComponent.h"
 #include "Components/SkeletalMeshComponent.h"
 #include "Engine/SkeletalMeshSocket.h"
@@ -44,6 +46,7 @@ void AWeapon::OnUse_Implementation(ACharacterBase* Character)
 		{
 			RightHandSocket->AttachActor(this, Character->GetMesh());
 			Character->SetRightHandWeapon(this);
+			UGameplayStatics::PlaySound2D(this, UseSound);
 		}
 	}
 }

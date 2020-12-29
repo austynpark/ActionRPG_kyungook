@@ -13,6 +13,9 @@ UCLASS()
 class ACTIONRPG_KYUNGOOK_API AWeapon : public AItem
 {
 	GENERATED_BODY()
+private:
+	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, meta = (AllowPrivateAccess = "true"))
+	class USoundCue* UseSound;
 public:
 	AWeapon();
 
