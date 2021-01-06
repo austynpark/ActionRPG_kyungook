@@ -85,7 +85,7 @@ public:
 	UPROPERTY(Category = "Combat", VisibleAnywhere, BlueprintReadOnly, meta = (ClampMax = "2"))
 	int32 AttackCount;
 
-	const int32 MaxAttackCount = 4;
+	const int32 MaxAttackCount = 3;
 
 	bool bIsAttacking;
 
@@ -99,13 +99,13 @@ public:
 	UPROPERTY(Category = "Player Stats", EditDefaultsOnly, BlueprintReadWrite)
 	float MaxHealth;
 
-	UPROPERTY(Category = "Player Stats", EditAnywhere, BlueprintReadOnly)
+	UPROPERTY(Category = "Player Stats", EditDefaultsOnly, BlueprintReadOnly)
 	float Health;
 
 	UPROPERTY(Category = "Player Stats", EditDefaultsOnly, BlueprintReadWrite)
 	float MaxStamina;
 
-	UPROPERTY(Category = "Player Stats", EditAnywhere, BlueprintReadOnly)
+	UPROPERTY(Category = "Player Stats", EditDefaultsOnly, BlueprintReadOnly)
 	float Stamina;
 
 	float LowStamina;

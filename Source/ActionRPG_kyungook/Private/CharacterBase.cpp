@@ -53,10 +53,10 @@ ACharacterBase::ACharacterBase()
 	GetCharacterMovement()->JumpZVelocity = JumpSpeed;
 	GetCharacterMovement()->MaxWalkSpeed = WalkSpeed;
 
-	MaxHealth = 350;
-	Health = 120;
+	MaxHealth = 100;
+	Health = 100;
 	MaxStamina = 100;
-	Stamina = 10;
+	Stamina = 100;
 	LowStamina = 30;
 	StaminaRate = 1;
 
@@ -228,43 +228,28 @@ void ACharacterBase::Attack()
 	UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
 	if (CombatMontage && AnimInstance)
 	{
-		if (!bIsAttacking)
-		{
-			if (AttackCount < MaxAttackCount)
-				++AttackCount;
-			bIsAttacking = true;
-			bSaveAttack = false;
-
-			AnimInstance->Montage_Play(CombatMontage, 2.2f);
-			FString sectionName = "Attack_" + FString::FromInt(AttackCount);
-			AnimInstance->Montage_JumpToSection(FName(*sectionName), CombatMontage);
-		}
+		bIsAttacking = true;
+		AnimInstance->Montage_Play(CombatMontage, 1.35f);
+		FString sectionName = "Attack_" + FString::FromInt(AttackCount);
+		AnimInstance->Montage_JumpToSection(FName(*sectionName), CombatMontage);
 	}
 }
 
 void ACharacterBase::ComboEnd()
 {
+	AttackCount = 0;
+	bSaveAttack = false;
 	bIsAttacking = false;
-
-	if (bSaveAttack)
-	{
-		Attack();
-
-		if (AttackCount == MaxAttackCount)
-		{
-			AttackCount = 0;
-			bSaveAttack = false;
-		}
-
-	}
-	else
-	{
-		AttackCount = 0;
-	}
 }
 
 void ACharacterBase::SaveAttack()
 {	
+	if (bSaveAttack)
+	{
+		bSaveAttack = false;
+		++AttackCount;
+		Attack();
+	}
 }
 
 void ACharacterBase::SetMovementStatus(EMovementStatus Status)
