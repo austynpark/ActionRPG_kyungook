@@ -34,6 +34,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Movement")
 	bool bIsInAir;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Movement")
-	class APawn* Pawn;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Pawn")
+	class ACharacterBase* Pawn;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Movement")
+	bool bIsMoving;
 };

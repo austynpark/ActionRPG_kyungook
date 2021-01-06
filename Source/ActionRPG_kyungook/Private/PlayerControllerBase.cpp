@@ -40,12 +40,10 @@ void APlayerControllerBase::ToggleInventoryHUD()
 	{
 		HUDInventory->SetVisibility(ESlateVisibility::Hidden);
 		bShowMouseCursor = false;
-		UE_LOG(LogTemp, Warning, TEXT("Show Cursor = False"));
 	}
 	else
 	{
 		HUDInventory->SetVisibility(ESlateVisibility::Visible);
 		bShowMouseCursor = true;
-		UE_LOG(LogTemp, Warning, TEXT("Show Cursor = True"));
 	}
 }

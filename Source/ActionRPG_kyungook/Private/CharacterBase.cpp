@@ -5,7 +5,6 @@
 #include "Weapon.h"
 #include "InventorySystemComponent.h"
 #include "Components/CapsuleComponent.h"
-#include "Components/SphereComponent.h"
 #include "Camera/CameraComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
@@ -54,12 +53,12 @@ ACharacterBase::ACharacterBase()
 	GetCharacterMovement()->JumpZVelocity = JumpSpeed;
 	GetCharacterMovement()->MaxWalkSpeed = WalkSpeed;
 
-	MaxHealth = 100.f;
-	Health = 65.f;
-	MaxStamina = 350.f;
-	Stamina = 120.f;
-	LowStamina = 100.f;
-	StaminaRate = 10.f;
+	MaxHealth = 350;
+	Health = 120;
+	MaxStamina = 100;
+	Stamina = 10;
+	LowStamina = 30;
+	StaminaRate = 1;
 
 	bIsShiftPressed = false;
 	bIsJumping = false;
@@ -68,6 +67,9 @@ ACharacterBase::ACharacterBase()
 	StaminaStatus = EStaminaStatus::SS_Recovering;
 
 	RightHandWeapon = nullptr;
+	AttackCount = 0;
+	bIsAttacking = false;
+	bSaveAttack = false;
 }
 
 void ACharacterBase::UseItem(AItem* item)
@@ -111,8 +113,7 @@ void ACharacterBase::BeginPlay()
 void ACharacterBase::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
-	HandleStamina(DeltaTime * StaminaRate);
+	HandleStamina(DeltaTime);
 }
 
 // Called to bind functionality to input
@@ -135,6 +136,9 @@ void ACharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 
 	PlayerInputComponent->BindAction("Run", IE_Pressed, this, &ACharacterBase::TurnOnRun);
 	PlayerInputComponent->BindAction("Run", IE_Released, this, &ACharacterBase::TurnOffRun);
+
+	PlayerInputComponent->BindAction("Attack", IE_Pressed, this, &ACharacterBase::LeftMouseButtonPressed);
+	PlayerInputComponent->BindAction("Attack", IE_Released, this, &ACharacterBase::LeftMouseButtonReleased);
 }
 
 void ACharacterBase::Jump()
@@ -179,6 +183,25 @@ void ACharacterBase::MoveRight(float value)
 	}
 }
 
+void ACharacterBase::LeftMouseButtonPressed()
+{
+	if (RightHandWeapon)
+	{
+		if(!bIsAttacking)
+		{
+			Attack();
+		}
+		else
+		{
+			bSaveAttack = true;
+		}
+	}
+}
+
+void ACharacterBase::LeftMouseButtonReleased()
+{
+}
+
 void ACharacterBase::TurnAtRate(float Rate)
 {
 	AddControllerYawInput(Rate * BaseTurnRate * GetWorld()->GetDeltaSeconds());
@@ -198,6 +221,50 @@ void ACharacterBase::TurnOffRun()
 {
 	bIsShiftPressed = false;
 	GetWorldTimerManager().SetTimer(StaminaTimer, FTimerDelegate::CreateUObject(this, &ACharacterBase::SetStaminaStatus, EStaminaStatus::SS_Recovering), 0.5f, false);
+}
+
+void ACharacterBase::Attack()
+{
+	UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
+	if (CombatMontage && AnimInstance)
+	{
+		if (!bIsAttacking)
+		{
+			if (AttackCount < MaxAttackCount)
+				++AttackCount;
+			bIsAttacking = true;
+			bSaveAttack = false;
+
+			AnimInstance->Montage_Play(CombatMontage, 2.2f);
+			FString sectionName = "Attack_" + FString::FromInt(AttackCount);
+			AnimInstance->Montage_JumpToSection(FName(*sectionName), CombatMontage);
+		}
+	}
+}
+
+void ACharacterBase::ComboEnd()
+{
+	bIsAttacking = false;
+
+	if (bSaveAttack)
+	{
+		Attack();
+
+		if (AttackCount == MaxAttackCount)
+		{
+			AttackCount = 0;
+			bSaveAttack = false;
+		}
+
+	}
+	else
+	{
+		AttackCount = 0;
+	}
+}
+
+void ACharacterBase::SaveAttack()
+{	
 }
 
 void ACharacterBase::SetMovementStatus(EMovementStatus Status)
@@ -244,7 +311,7 @@ void ACharacterBase::HandleStamina(float val)
 		break;
 	case EStaminaStatus::SS_Recovering :
 		if (!bIsShiftPressed && (Stamina < MaxStamina))
-			Stamina += val * 10.f;
+			Stamina += val * StaminaRate;
 		else
 			SetStaminaStatus(EStaminaStatus::SS_Normal);
 		break;

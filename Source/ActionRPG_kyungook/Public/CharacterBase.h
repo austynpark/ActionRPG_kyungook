@@ -50,6 +50,9 @@ private:
 	UPROPERTY(Category = "Enums", VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	EStaminaStatus StaminaStatus;
 
+	UPROPERTY(Category = "Combat", EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	class UAnimMontage* CombatMontage;
+
 	class AWeapon* RightHandWeapon;
 
 public:
@@ -79,6 +82,15 @@ public:
 
 	bool bIsJumping;
 
+	UPROPERTY(Category = "Combat", VisibleAnywhere, BlueprintReadOnly, meta = (ClampMax = "2"))
+	int32 AttackCount;
+
+	const int32 MaxAttackCount = 4;
+
+	bool bIsAttacking;
+
+	bool bSaveAttack;
+
 	/** Player Stats
 	* @param 
 	*/
@@ -87,13 +99,13 @@ public:
 	UPROPERTY(Category = "Player Stats", EditDefaultsOnly, BlueprintReadWrite)
 	float MaxHealth;
 
-	UPROPERTY(Category = "Player Stats", EditAnywhere, BlueprintReadWrite)
+	UPROPERTY(Category = "Player Stats", EditAnywhere, BlueprintReadOnly)
 	float Health;
 
 	UPROPERTY(Category = "Player Stats", EditDefaultsOnly, BlueprintReadWrite)
 	float MaxStamina;
 
-	UPROPERTY(Category = "Player Stats", EditAnywhere, BlueprintReadWrite)
+	UPROPERTY(Category = "Player Stats", EditAnywhere, BlueprintReadOnly)
 	float Stamina;
 
 	float LowStamina;
@@ -131,6 +143,9 @@ public:
 	void MoveForward(float value);
 	
 	void MoveRight(float value);
+
+	void LeftMouseButtonPressed();
+	void LeftMouseButtonReleased();
 	
 	/** Called via input to turn at a given rate
 	* @param Rate This is a normalized rate, i.e. 1.0 means 100% of desired turn rate
@@ -146,6 +161,20 @@ public:
 	void TurnOnRun();
 	/** Called if any shift keys are released, decend Max walk speed = 450*/
 	void TurnOffRun();
+
+	
+
+	/** Called if left mouse button is pressed, Plays Combat AnimMontage */
+	UFUNCTION(BlueprintCallable)
+	void Attack();
+
+	/** Called at AnimInstance after Attack */
+	UFUNCTION(BlueprintCallable)
+	void ComboEnd();
+
+	/** Called during the Combat AnimMotage is Playing */
+	UFUNCTION(BlueprintCallable)
+	void SaveAttack();
 
 	/** if(Stamina Status) 
 	*	Normal -> val == 0 or Negative, 
