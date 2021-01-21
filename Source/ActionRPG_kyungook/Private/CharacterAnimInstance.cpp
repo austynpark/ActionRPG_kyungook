@@ -12,7 +12,6 @@ void UCharacterAnimInstance::NativeInitializeAnimation()
 		// Gets the owner of this animation
 		Pawn = Cast<ACharacterBase>(TryGetPawnOwner());
 		bIsMoving = false;
-		//Pawn = dynamic_cast<ACharacterBase*>(TryGetPawnOwner());
 	}
 }
 

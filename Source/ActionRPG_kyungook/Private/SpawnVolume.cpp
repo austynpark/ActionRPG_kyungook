@@ -3,7 +3,7 @@
 
 #include "SpawnVolume.h"
 
-#include "Critter.h"
+#include "Enemy.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "Engine/World.h"
 #include "Components/BoxComponent.h"
@@ -50,8 +50,8 @@ void ASpawnVolume::SpawnPawn_Implementation(UClass* _ToSpawn, const FVector& Loc
 		if (World)
 		{
 			//Spawn Actor returns spawned object address
-			ACritter* SpawnedActor = 
-			World->SpawnActor<ACritter>(_ToSpawn, Location, FRotator(0.f));
+			AEnemy* SpawnedActor =
+			World->SpawnActor<AEnemy>(_ToSpawn, Location, FRotator(0.f));
 		}
 
 		

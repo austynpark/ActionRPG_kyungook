@@ -228,6 +228,8 @@ void ACharacterBase::Attack()
 	UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
 	if (CombatMontage && AnimInstance)
 	{
+		Stamina -= 50.f; 
+
 		bIsAttacking = true;
 		AnimInstance->Montage_Play(CombatMontage, 1.35f);
 		FString sectionName = "Attack_" + FString::FromInt(AttackCount);
