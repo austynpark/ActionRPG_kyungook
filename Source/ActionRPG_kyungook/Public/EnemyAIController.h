@@ -4,8 +4,9 @@
 
 #include "CoreMinimal.h"
 #include "AIController.h"
-#include "EnemyAIController.generated.h"
+#include "Perception/AIPerceptionTypes.h"
 
+#include "EnemyAIController.generated.h"
 /**
  * 
  */
@@ -17,18 +18,23 @@ protected:
 	virtual void BeginPlay() override;
 private:
 
-	//UPROPERTY(Transient)
-	//class UBlackboardComponent* BlackboardComp;
+	UPROPERTY(Transient)
+	class UBlackboardComponent* BlackboardComp;
 
-	//UPROPERTY(Transient)
-	//class UBehaviorTreeComponent* BehaviorTreeComp;
-	//
-	UPROPERTY(Category = "Behavior Tree",BlueprintReadOnly,EditAnywhere,meta=(AllowPrivateAccess = "true"))
-	UBehaviorTree* BT_Asset;
+	UPROPERTY(Transient)
+	class UBehaviorTreeComponent* BehaviorTreeComp;
+
+	UFUNCTION()
+	virtual void OnTargetSensed(AActor* Actor, FAIStimulus Stimulus);
+
 public:
 
 	AEnemyAIController();
-	//
-	//class UAIPerceptionComponent* AIperception;
-	//class UAISenseConfig_Sight* AIConfigSight;
+
+	virtual void OnPossess(APawn* InPawn) override;
+
+	uint8 PlayerKeyID;
+	
+	class UAIPerceptionComponent* AIperception;
+	class UAISenseConfig_Sight* AIConfigSight;
 };

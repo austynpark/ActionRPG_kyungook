@@ -55,6 +55,9 @@ private:
 
 	class AWeapon* RightHandWeapon;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	class UAIPerceptionStimuliSourceComponent* AIStimuliSource;
+
 public:
 	// Sets default values for this character's properties
 	ACharacterBase();

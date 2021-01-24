@@ -25,6 +25,9 @@ public:
 	// Sets default values for this character's properties
 	AEnemy();
 
+	UPROPERTY(Category = "AI Behavior", EditAnywhere)
+	UBehaviorTree* BT_Asset;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

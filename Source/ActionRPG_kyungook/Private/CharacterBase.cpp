@@ -8,6 +8,8 @@
 #include "Camera/CameraComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "Perception/AIPerceptionStimuliSourceComponent.h"
+#include "Perception/AISenseConfig_Sight.h"
 
 
 // Sets default values
@@ -70,6 +72,9 @@ ACharacterBase::ACharacterBase()
 	AttackCount = 0;
 	bIsAttacking = false;
 	bSaveAttack = false;
+
+	AIStimuliSource = CreateDefaultSubobject<UAIPerceptionStimuliSourceComponent>(TEXT("AIStimuliSource"));
+	AIStimuliSource->RegisterForSense(TSubclassOf<UAISense_Sight>());
 }
 
 void ACharacterBase::UseItem(AItem* item)
